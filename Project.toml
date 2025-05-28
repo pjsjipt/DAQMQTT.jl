@@ -3,7 +3,21 @@ uuid = "c2ba2316-99fd-4ef4-be2e-b913c8e7121d"
 authors = ["= <pjabardo@ipt.br> and contributors"]
 version = "1.0.0-DEV"
 
+[deps]
+DAQCore = "7b03aed3-9854-4651-ba28-76b88bef8818"
+DAQHDF5 = "3679571a-6675-409e-9618-c02a2349284e"
+Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
+MQTTClient = "985f35cc-2c3d-4943-b8c1-f0931d5f0959"
+Revise = "295af30f-e4ad-537b-8983-00126c2a3abe"
+Statistics = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
+
 [compat]
+DAQCore = "0.1.0"
+DAQHDF5 = "0.1.0"
+Dates = "1.11.0"
+MQTTClient = "0.3.1"
+Revise = "3.8.0"
+Statistics = "1.11.1"
 julia = "1.10"
 
 [extras]
