@@ -1,4 +1,4 @@
-mutable struct MQTTTopic{T} <: AbstractInputDev
+mutable struct MQTTTopic{T} <: AbstractMQTTDevice
     devname::String
     broker::Tuple{String,Int64}
     user::User
@@ -23,7 +23,7 @@ function MQTTTopic(devname, topic, ::Type{T}=Float64; broker="192.168.0.180", po
                         Tuple{DateTime,T}[], 10.0, false, atleastone, unit)
 end
 
-function reconnect!(dev::MQTTTopic)
+function reconnect!(dev::AbstractMQTTDevice)
     broker = dev.broker[1]
     port = dev.broker[2]
     client, connection = MakeConnection(broker, port;
@@ -35,16 +35,13 @@ end
 
 
 
-function DAQCore.daqconfigdev(dev::MQTTTopic; time=10)
+function DAQCore.daqconfigdev(dev::AbstractMQTTDevice; time=10)
     time <= 0 &&  error("Time should be a positive number of seconds!")
     time > 10_000 && error("Time is too large. In this framework it should be a couple of minute...")
     dev.time = time
 end
 
 function make_subscription(dev::MQTTTopic{T}) where {T}
-
-    #client, topic, buf::Vector{Tuple{DateTime,T}};
-    #                       qos=QOS_2) where {T}
 
     dev.buffer = Tuple{DateTime,T}[]
     on_msg = (topic, payload) -> begin
@@ -54,7 +51,6 @@ function make_subscription(dev::MQTTTopic{T}) where {T}
         push!(dev.buffer, (t,x))
     end
     dev.subscribed = true
-    #reconnect!(dev)
     dev.tstart = time()
     subscribe(dev.client, dev.topic, on_msg; qos=QOS_2)
 end
