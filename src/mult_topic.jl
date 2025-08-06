@@ -92,7 +92,7 @@ function read_topic_data(dev::MQTTMultTopics{T}, k) where {T}
     S = DaqSamplingTimes(t[1:Nt])
     ch = [dev.topics[k]]
 
-    return MeasData(dev.devname, "MQTTTopic", S, x, ch, [dev.units[k]])
+    return MeasData(dev.devname, "MQTTMultTopics", S, x, ch, [dev.units[k]])
 
 end
 
@@ -112,7 +112,7 @@ function DAQCore.daqread(dev::MQTTMultTopics)
     
 end
 
-function DAQCore.daqacquire(dev::MQTTTopic)
+function DAQCore.daqacquire(dev::MQTTMultTopics)
     scan!(dev)
     return daqread(dev)
 end
