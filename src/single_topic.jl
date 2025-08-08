@@ -79,7 +79,7 @@ DAQCore.issamplesavailable(dev::MQTTTopic) = length(dev.buffer) > 0
 
 
 function DAQCore.daqstart(dev::MQTTTopic)
-
+    reconnect!(dev)
     Threads.@spawn scan!(dev)
 end
 
@@ -116,6 +116,8 @@ function DAQCore.daqread(dev::MQTTTopic)
 end
 
 function DAQCore.daqacquire(dev::MQTTTopic)
+    reconnect!(dev)
+
     scan!(dev)
     return daqread(dev)
 end

@@ -76,7 +76,7 @@ end
 
 
 function DAQCore.daqstart(dev::MQTTMultTopics)
-
+    reconnect!(dev)
     Threads.@spawn scan!(dev)
 end
 
@@ -113,6 +113,7 @@ function DAQCore.daqread(dev::MQTTMultTopics)
 end
 
 function DAQCore.daqacquire(dev::MQTTMultTopics)
+    reconnect!(dev)
     scan!(dev)
     return daqread(dev)
 end
