@@ -27,7 +27,11 @@ function MQTTMultTopics(devname, topics, ::Type{T}=Float64;
     br = (broker,port)
     us = User(user,password)
     # Make connection
-    client, connection = MakeConnection(broker, port; user=us)
+    if user==""
+        client, connection = MakeConnection(broker, port)
+    else
+        client, connection = MakeConnection(broker, port; user=us)
+    end
     connect(client, connection)
     return MQTTMultTopics{T}(devname, br, us, client, topics, 0.0,
                              Vector{Tuple{DateTime,T}}[], 10.0, false,

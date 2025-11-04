@@ -17,7 +17,12 @@ function MQTTTopic(devname, topic, ::Type{T}=Float64; broker="192.168.0.180", po
     br = (broker,port)
     us = User(user,password)
     # Make connection
-    client, connection = MakeConnection(broker, port; user=us)
+    if user==""
+        client, connection = MakeConnection(broker, port)
+    else
+        client, connection = MakeConnection(broker, port; user=us)
+    end
+    
     connect(client, connection)
     return MQTTTopic{T}(devname, br, us, client, topic, 0.0,
                         Tuple{DateTime,T}[], 10.0, false, atleastone, unit)
@@ -26,8 +31,11 @@ end
 function reconnect!(dev::AbstractMQTTDevice)
     broker = dev.broker[1]
     port = dev.broker[2]
-    client, connection = MakeConnection(broker, port;
-                                        user=dev.user)
+    if dev.user.name == ""
+        client, connection = MakeConnection(broker, port)
+    else
+        client, connection = MakeConnection(broker, port; user=dev.user)
+    end
     connect(client, connection)
     dev.client = client
     return
